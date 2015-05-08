@@ -1,5 +1,8 @@
 package org.nationsatwar.palette;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.util.BlockPos;
+
 public class WorldLocation {
 	
 	private String worldName;
@@ -12,6 +15,22 @@ public class WorldLocation {
 		
 		this.worldName = worldName;
 		this.posX = posX; this.posY = posY; this.posZ = posZ;
+	}
+	
+	public WorldLocation(String worldName, BlockPos blockPos) {
+		
+		this.worldName = worldName;
+		this.posX = blockPos.getX();
+		this.posY = blockPos.getY();
+		this.posZ = blockPos.getZ();
+	}
+	
+	public WorldLocation(Entity entity) {
+		
+		this.worldName = entity.worldObj.provider.getDimensionName();
+		this.posX = entity.posX;
+		this.posY = entity.posY;
+		this.posZ = entity.posZ;
 	}
 	
 	public String getWorldName() {
@@ -44,5 +63,10 @@ public class WorldLocation {
 	
 	public void setPosZ(double posZ) {
 		this.posZ = posZ;
+	}
+	
+	public String getFormattedCoords() {
+		
+		return (int) posX + "," + (int) posY + "," + (int) posZ;
 	}
 }
