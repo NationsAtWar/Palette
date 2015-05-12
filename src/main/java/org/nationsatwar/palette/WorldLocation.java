@@ -1,11 +1,15 @@
 package org.nationsatwar.palette;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.Vec3;
+import net.minecraft.world.WorldServer;
 
 public class WorldLocation {
 	
 	private String worldName;
+	private int worldID;
 	
 	private double posX;
 	private double posY;
@@ -15,6 +19,8 @@ public class WorldLocation {
 		
 		this.worldName = worldName;
 		this.posX = posX; this.posY = posY; this.posZ = posZ;
+		
+		findWorldID();
 	}
 	
 	public WorldLocation(String worldName, BlockPos blockPos) {
@@ -23,6 +29,8 @@ public class WorldLocation {
 		this.posX = blockPos.getX();
 		this.posY = blockPos.getY();
 		this.posZ = blockPos.getZ();
+		
+		findWorldID();
 	}
 	
 	public WorldLocation(Entity entity) {
@@ -31,6 +39,8 @@ public class WorldLocation {
 		this.posX = entity.posX;
 		this.posY = entity.posY;
 		this.posZ = entity.posZ;
+		
+		findWorldID();
 	}
 	
 	public String getWorldName() {
@@ -39,6 +49,14 @@ public class WorldLocation {
 	
 	public void setWorldName(String worldName) {
 		this.worldName = worldName;
+	}
+	
+	public int getWorldID() {
+		return worldID;
+	}
+	
+	public void setWorldID(int worldID) {
+		this.worldID = worldID;
 	}
 	
 	public double getPosX() {
@@ -68,5 +86,22 @@ public class WorldLocation {
 	public String getFormattedCoords() {
 		
 		return (int) posX + "," + (int) posY + "," + (int) posZ;
+	}
+	
+	public Vec3 getVector() {
+		
+		return new Vec3(posX, posY, posZ);
+	}
+	
+	private void findWorldID() {
+		
+		for (WorldServer world : MinecraftServer.getServer().worldServers) {
+			
+			if (world.provider.getDimensionName().equals(worldName)) {
+				
+				this.worldID = world.provider.getDimensionId();
+				break;
+			}
+		}
 	}
 }
