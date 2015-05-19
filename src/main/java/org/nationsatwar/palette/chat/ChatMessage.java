@@ -8,7 +8,8 @@ public class ChatMessage {
 	
 	public static void sendMessage(EntityPlayer player, String message) {
 		
-		player.getCommandSenderEntity().addChatMessage(new ChatComponentText(message));
+		if (player != null)
+			player.getCommandSenderEntity().addChatMessage(new ChatComponentText(message));
 	}
 	
 	public static String formatMessage(String playerName, String message, MessageType messageType) {

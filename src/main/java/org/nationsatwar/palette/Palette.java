@@ -6,6 +6,9 @@ import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+
+import org.nationsatwar.palette.gui.GUIHandler;
  
 @Mod(modid = Palette.MODID, name = Palette.MODNAME, version = Palette.MODVER)
 public class Palette {
@@ -26,7 +29,8 @@ public class Palette {
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		
-		
+		// Register GUI
+		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GUIHandler());
 	}
 	
 	@EventHandler
