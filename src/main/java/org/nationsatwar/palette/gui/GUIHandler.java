@@ -15,36 +15,42 @@ public class GUIHandler implements IGuiHandler {
 	
 	private static Map<Integer, GUIScreen> guiScreens = new HashMap<Integer, GUIScreen>();
 	
-	public static void openGUI(GUIScreen guiScreen) {
+	/**
+	 * Use this to open up your custom GUIScreen
+	 * 
+	 * @param guiScreen The screen you wish to open
+	 * @param unique Setting unique to false will open the guiScreen, true will open the class
+	 * 		(Unless you have want multiple unique instances of the same GUIScreen, set to true)
+	 */
+	public static void openGUI(GUIScreen guiScreen, boolean unique) {
 		
-		if (!containsGUI(guiScreen))
+		if (!containsGUI(guiScreen, unique))
 			registerGUIScreen(guiScreen);
 		
 		EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
-		player.openGui(Palette.instance, getScreenID(guiScreen), player.getEntityWorld(), 0, 0, 0);
+		player.openGui(Palette.instance, getScreenID(guiScreen, unique), player.getEntityWorld(), 0, 0, 0);
 	}
 	
-	private static void registerGUIScreen(GUIScreen guiScreen) {
+	private static boolean containsGUI(GUIScreen guiScreen, boolean unique) {
 		
-		guiScreens.put(getNextFreeID(), guiScreen);
-	}
-	
-	private static int getScreenID(Object guiScreen) {
-		
-		for (int guiID : guiScreens.keySet())
-			if (guiScreens.get(guiID).getClass().equals(guiScreen.getClass()))
-				return guiID;
-		
-		return 0;
-	}
-	
-	private static boolean containsGUI(GUIScreen guiScreen) {
-		
-		for (GUIScreen gui : guiScreens.values())
-			if (gui.getClass().equals(guiScreen.getClass()))
+		for (GUIScreen gui : guiScreens.values()) {
+			
+			if (!unique && gui.equals(guiScreen))
 				return true;
+			
+			if (unique && gui.getClass().equals(guiScreen.getClass()))
+				return true;
+		}
 		
 		return false;
+	}
+	
+	private static int registerGUIScreen(GUIScreen guiScreen) {
+		
+		int screenID = getNextFreeID();
+		guiScreens.put(screenID, guiScreen);
+		
+		return screenID;
 	}
 	
 	private static int getNextFreeID() {
@@ -58,7 +64,21 @@ public class GUIHandler implements IGuiHandler {
 			id++;
 		}
 	}
-
+	
+	private static int getScreenID(Object guiScreen, boolean unique) {
+		
+		for (int guiID : guiScreens.keySet()) {
+			
+			if (!unique && guiScreens.get(guiID).equals(guiScreen))
+				return guiID;
+			
+			if (unique && guiScreens.get(guiID).getClass().equals(guiScreen.getClass()))
+				return guiID;
+		}
+		
+		return 0;
+	}
+	
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world,
 			int x, int y, int z) {

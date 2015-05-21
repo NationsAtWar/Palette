@@ -59,7 +59,17 @@ public abstract class GUIScreen extends GuiScreen {
 		return button;
 	}
 	
+	@SuppressWarnings("unchecked")
+	protected void addButton(GUIButton button) {
+		
+		button.enabled = true;
+		buttonList.add(button);
+	}
+	
 	protected GUITextField addTextField(int posX, int posY, int width, int height, String text) {
+		
+		if (text == null)
+			text = "";
 		
 		GUITextField textField = new GUITextField(2, fontRendererObj, posX, posY, width, height);
 		textField.setText(text);
@@ -96,7 +106,7 @@ public abstract class GUIScreen extends GuiScreen {
 			String charString = "" + par1;
 			
 			// Only accept valid characters
-			if ((textField.getRegEx() != "" && !charString.matches(textField.getRegEx())) && 
+			if ((!textField.getRegEx().isEmpty() && !charString.matches(textField.getRegEx())) && 
 					!allowedUnicodes(par1))
 				return;
 			
@@ -167,6 +177,7 @@ public abstract class GUIScreen extends GuiScreen {
 		drawModalRectWithCustomSizedTexture(windowX + borderSize, windowY + borderSize, borderSize, borderSize, 
 				windowWidth - borderSize * 2, windowHeight - borderSize, imageSize, imageSize);
 		
+		// Handles labels and label formatting
 		for (GUILabel label : labelList) {
 
 			String text = label.getText();
@@ -174,8 +185,13 @@ public abstract class GUIScreen extends GuiScreen {
 			int posY = label.getPosY();
 			int fontColor = label.getFontColor();
 			
+			if (text == null)
+				text = "";
+			
+			// Label formatting
 			GL11.glPushMatrix();
 			
+			// Doubles label size
 			if (label.isSizeDoubled()) {
 				
 				posX /= 2;
@@ -183,16 +199,48 @@ public abstract class GUIScreen extends GuiScreen {
 				GL11.glScaled(2, 2, 2);
 			}
 			
-			if (label.isCentered())
-				drawCenteredString(fontRendererObj, text, posX, posY, fontColor);
-			else
-				drawString(fontRendererObj, text, posX, posY, fontColor);
+			// Handles word wrap
+			if (label.getWordWrap() > 0) {
+				
+				int wordWrap = label.getWordWrap();
+				int characterLength = (label.isSizeDoubled() ? 12 : 6);
+				int charsPerLine = wordWrap / characterLength;
+				int numberOfLines = wordWrap / charsPerLine;
+				int textLength = text.length();
+				
+				for (int i = 0; i < numberOfLines; i++) {
+
+					int beginIndex = i * charsPerLine;
+					int endIndex = (i + 1) * charsPerLine;
+
+					if (textLength < beginIndex)
+						continue;
+					
+					String substring = ((text.length() > endIndex) ? text.substring(beginIndex, endIndex) : 
+						text.substring(beginIndex));
+					
+					if (label.isCentered())
+						drawCenteredString(fontRendererObj, substring, posX, posY + i * 10, fontColor);
+					else
+						drawString(fontRendererObj, substring, posX, posY + i * 10, fontColor);
+				}
+				
+			} else {
+			
+				if (label.isCentered())
+					drawCenteredString(fontRendererObj, text, posX, posY, fontColor);
+				else
+					drawString(fontRendererObj, text, posX, posY, fontColor);
+			}
 			
 			GL11.glPopMatrix();
 		}
 
-		for (GUITextField textField : textFieldList)
+		for (GUITextField textField : textFieldList) {
+			
+			//textField.writeText("Test");
 			textField.drawTextBox();
+		}
 		
 		super.drawScreen(mouseX, mouseY, renderPartialTicks);
 	}

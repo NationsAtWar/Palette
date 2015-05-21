@@ -12,6 +12,8 @@ public class GUILabel {
 	private boolean isCentered;
 	private boolean sizeDoubled;
 	
+	private int wordWrap;
+	
 	public GUILabel(int posX, int posY, int fontColor, String text) {
 		
 		this.posX = posX;
@@ -71,5 +73,13 @@ public class GUILabel {
 	
 	public void setSizeDoubled(boolean sizeDoubled) {
 		this.sizeDoubled = sizeDoubled;
+	}
+	
+	public int getWordWrap() {
+		return wordWrap;
+	}
+	
+	public void setWordWrap(int wordWrap) {
+		this.wordWrap = wordWrap;
 	}
 }
