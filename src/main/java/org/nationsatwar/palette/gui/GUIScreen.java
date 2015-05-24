@@ -62,6 +62,7 @@ public abstract class GUIScreen extends GuiScreen {
 	@SuppressWarnings("unchecked")
 	protected void addButton(GUIButton button) {
 		
+		button.id = buttonList.size();
 		button.enabled = true;
 		buttonList.add(button);
 	}
@@ -73,7 +74,7 @@ public abstract class GUIScreen extends GuiScreen {
 		
 		GUITextField textField = new GUITextField(2, fontRendererObj, posX, posY, width, height);
 		textField.setText(text);
-		textField.setFocused(true);
+		textField.setFocused(false);
 		textFieldList.add(textField);
 		
 		return textField;
@@ -258,7 +259,7 @@ public abstract class GUIScreen extends GuiScreen {
 		if(!button.isMouseOver())
 			return;
 		
-		if (buttonList.get(button.id) instanceof GUIButton) {
+		if (buttonList.size() > button.id && buttonList.get(button.id) instanceof GUIButton) {
 			
 			GUIButton guiButton = (GUIButton) buttonList.get(button.id);
 			buttonClicked(guiButton);

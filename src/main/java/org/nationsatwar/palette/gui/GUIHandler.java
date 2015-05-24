@@ -33,6 +33,9 @@ public class GUIHandler implements IGuiHandler {
 	
 	private static boolean containsGUI(GUIScreen guiScreen, boolean unique) {
 		
+		if (guiScreen == null)
+			return false;
+		
 		for (GUIScreen gui : guiScreens.values()) {
 			
 			if (!unique && gui.equals(guiScreen))
@@ -46,6 +49,9 @@ public class GUIHandler implements IGuiHandler {
 	}
 	
 	private static int registerGUIScreen(GUIScreen guiScreen) {
+		
+		if (guiScreen == null)
+			return 0;
 		
 		int screenID = getNextFreeID();
 		guiScreens.put(screenID, guiScreen);
