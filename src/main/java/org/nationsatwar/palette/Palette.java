@@ -7,8 +7,12 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.relauncher.Side;
 
 import org.nationsatwar.palette.gui.GUIHandler;
+import org.nationsatwar.palette.packets.PacketGiveItem;
+import org.nationsatwar.palette.packets.PacketHandlerGiveItem;
  
 @Mod(modid = Palette.MODID, name = Palette.MODNAME, version = Palette.MODVER)
 public class Palette {
@@ -20,10 +24,15 @@ public class Palette {
 	public static final String MODNAME = "Palette";
 	public static final String MODVER = "0.0.1";
 	
+	public static SimpleNetworkWrapper channel;
+	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		
-		
+
+		// Packet Registration
+		channel = NetworkRegistry.INSTANCE.newSimpleChannel(Palette.MODID);
+		channel.registerMessage(PacketHandlerGiveItem.class, PacketGiveItem.class, 0, Side.CLIENT);
+		channel.registerMessage(PacketHandlerGiveItem.class, PacketGiveItem.class, 0, Side.SERVER);
 	}
 	
 	@EventHandler

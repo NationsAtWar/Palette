@@ -109,7 +109,7 @@ public abstract class GUIScreen extends GuiScreen {
 			// Only accept valid characters
 			if ((!textField.getRegEx().isEmpty() && !charString.matches(textField.getRegEx())) && 
 					!allowedUnicodes(par1))
-				return;
+				continue;
 			
 			textField.textboxKeyTyped(par1, par2);
 		}
