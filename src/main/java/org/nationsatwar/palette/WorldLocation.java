@@ -4,6 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
 public class WorldLocation {
@@ -103,5 +104,14 @@ public class WorldLocation {
 				break;
 			}
 		}
+	}
+	
+	public World getWorldObject() {
+		
+		for (WorldServer world : MinecraftServer.getServer().worldServers)
+			if (world.provider.getDimensionName().equals(worldName))
+				return world;
+		
+		return null;
 	}
 }
