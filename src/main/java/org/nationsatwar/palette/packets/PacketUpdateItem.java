@@ -1,39 +1,36 @@
 package org.nationsatwar.palette.packets;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
-public class PacketGiveItem implements IMessage {
-
-	public String playerUUID;
-	public int itemID;
-	public int itemAmount;
+public class PacketUpdateItem implements IMessage {
 	
-	public PacketGiveItem() {
+	public String playerUUID;
+	public NBTTagCompound tagCompound;
+	
+	public PacketUpdateItem() {
 		
 	}
 	
-	public PacketGiveItem(String playerUUID, int itemID, int itemAmount) {
-
+	public PacketUpdateItem(String playerUUID, NBTTagCompound tagCompound) {
+		
 		this.playerUUID = playerUUID;
-		this.itemID = itemID;
-		this.itemAmount = itemAmount;
+		this.tagCompound = tagCompound;
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		
 		playerUUID = ByteBufUtils.readUTF8String(buf);
-		itemID = buf.readInt();
-		itemAmount = buf.readInt();
+		tagCompound = ByteBufUtils.readTag(buf);
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
 
 		ByteBufUtils.writeUTF8String(buf, playerUUID);
-		buf.writeInt(itemID);
-		buf.writeInt(itemAmount);
+		ByteBufUtils.writeTag(buf, tagCompound);
 	}
 }

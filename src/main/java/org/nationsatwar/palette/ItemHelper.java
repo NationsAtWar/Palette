@@ -19,15 +19,14 @@ public class ItemHelper {
 		
 		String playerUUID = player.getUniqueID().toString();
 		
-		String itemName = item.getUnlocalizedName();
-		if (itemName.length() > 5)
-			itemName = itemName.substring(5);
+		ItemStack itemStack = new ItemStack(item, itemAmount);
+		player.inventory.addItemStackToInventory(itemStack);
 		
-		player.inventory.addItemStackToInventory(new ItemStack(item, itemAmount));
+		int itemID = Item.getIdFromItem(item);
 		
 		if (player.worldObj.isRemote)
-			Palette.channel.sendToServer(new PacketGiveItem(playerUUID, itemName, itemAmount));
+			Palette.channel.sendToServer(new PacketGiveItem(playerUUID, itemID, itemAmount));
 		else if (player instanceof EntityPlayerMP)
-			Palette.channel.sendTo(new PacketGiveItem(playerUUID, itemName, itemAmount), (EntityPlayerMP) player);
+			Palette.channel.sendTo(new PacketGiveItem(playerUUID, itemID, itemAmount), (EntityPlayerMP) player);
 	}
 }

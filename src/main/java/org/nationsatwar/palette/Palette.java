@@ -13,6 +13,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import org.nationsatwar.palette.gui.GUIHandler;
 import org.nationsatwar.palette.packets.PacketGiveItem;
 import org.nationsatwar.palette.packets.PacketHandlerGiveItem;
+import org.nationsatwar.palette.packets.PacketHandlerUpdateItem;
+import org.nationsatwar.palette.packets.PacketUpdateItem;
  
 @Mod(modid = Palette.MODID, name = Palette.MODNAME, version = Palette.MODVER)
 public class Palette {
@@ -33,6 +35,8 @@ public class Palette {
 		channel = NetworkRegistry.INSTANCE.newSimpleChannel(Palette.MODID);
 		channel.registerMessage(PacketHandlerGiveItem.class, PacketGiveItem.class, 0, Side.CLIENT);
 		channel.registerMessage(PacketHandlerGiveItem.class, PacketGiveItem.class, 0, Side.SERVER);
+		channel.registerMessage(PacketHandlerUpdateItem.class, PacketUpdateItem.class, 1, Side.SERVER);
+		channel.registerMessage(PacketHandlerUpdateItem.class, PacketUpdateItem.class, 1, Side.CLIENT);
 	}
 	
 	@EventHandler

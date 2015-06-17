@@ -18,7 +18,7 @@ public class PacketHandlerGiveItem implements IMessageHandler<PacketGiveItem, IM
 		UUID playerUUID = UUID.fromString(message.playerUUID);
 		EntityPlayer player = MinecraftServer.getServer().getConfigurationManager().getPlayerByUUID(playerUUID);
 		
-		Item item = Item.getByNameOrId(message.itemName);
+		Item item = Item.getByNameOrId(message.itemID + "");
 		int itemAmount = message.itemAmount;
 		
 		if (item == null)
